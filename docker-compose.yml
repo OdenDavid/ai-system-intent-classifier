@@ -42,7 +42,19 @@ services:
     ports:
       - "8000:8000"
 
-  # One-off helper
+  classifier:
+    build: ./services/classifier
+    environment:
+      TYPESAFE_API_KEY: ${TYPESAFE_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      JEV_THRESHOLD: ${JEV_THRESHOLD:-0.9}
+      DATA_PATH: /data/messages.csv
+    volumes:
+      - ./data:/data:ro
+    ports:
+      - "8001:8000"
+
+  # One-off helper for scripts/streams_demo.py. Not started by `docker compose up`.
   tools:
     image: python:3.12-slim
     profiles: ["tools"]
